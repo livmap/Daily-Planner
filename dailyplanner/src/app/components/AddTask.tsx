@@ -5,7 +5,14 @@ import React, { useState, useEffect } from "react";
 interface Task {
   name: string;
   time: string;
+  color: string; // New property for the color
 }
+
+const COLORS = [
+  "#FF5733", "#33FF57", "#3357FF", "#FF33A1", "#33FFF6", "#F4FF33", "#FF8133", 
+  "#33FF8E", "#8E33FF", "#FF3380", "#A1FF33", "#33F7FF", "#FF6733", "#FF3380", 
+  "#33FF57", "#7B33FF", "#FF8C33", "#FF5633", "#FF5733", "#33FF57"
+];
 
 export default function AddTask({ onClose }: { onClose: () => void }) {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -13,7 +20,6 @@ export default function AddTask({ onClose }: { onClose: () => void }) {
   const [availableTimes, setAvailableTimes] = useState<string[]>([]);
   const [selectedTime, setSelectedTime] = useState("");
 
-  // Simulated available times (you can modify this as needed)
   const generateTimes = () => {
     const times: string[] = [];
     for (let hour = 0; hour < 24; hour++) {
@@ -28,38 +34,33 @@ export default function AddTask({ onClose }: { onClose: () => void }) {
     return times;
   };
 
-  // Fetch tasks and calculate available times
   useEffect(() => {
-
-    let allTimes = generateTimes()
+    let allTimes = generateTimes();
 
     const storedTasks = localStorage.getItem("tasks");
     const parsedTasks = storedTasks ? JSON.parse(storedTasks) : [];
     setTasks(parsedTasks);
 
-    const usedTimes = parsedTasks.map((task: Task) => task.time);
-    const available = allTimes.filter((time) => !usedTimes.includes(time));
-    setAvailableTimes(available);
+    
+    setAvailableTimes(allTimes);
 
-    if (available.length > 0) {
-      setSelectedTime(available[0]);
-    }
+    setSelectedTime(allTimes[0]);
+    
   }, []);
 
-  // Function to add a new task
+  // Function to add a new task with a random color
   const handleAddTask = () => {
     if (!taskName || !selectedTime) return;
 
-    const newTask = { name: taskName, time: selectedTime };
+    const randomColor = COLORS[Math.floor(Math.random() * COLORS.length)];
+    const newTask = { name: taskName, time: selectedTime, color: randomColor };
     const updatedTasks = [...tasks, newTask];
 
-    // Save to localStorage
     localStorage.setItem("tasks", JSON.stringify(updatedTasks));
     setTasks(updatedTasks);
 
-    // Reset input
     setTaskName("");
-    onClose(); // Close the modal after adding the task
+    onClose();
   };
 
   return (
