@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Navbar from "./components/Navbar";
 import TaskBlock from "./components/TaskBlock";
 
 export default function DailyPlanner() {
@@ -27,7 +28,8 @@ export default function DailyPlanner() {
   }, []);
 
   return (
-    <div className="flex flex-col items-center p-6 w-full h-screen bg-white">
+    <div className="flex flex-col items-center w-full h-screen bg-white">
+      <Navbar />
       {/* Scrollable Container */}
       <div className="w-4/5 overflow-x-auto">
         {/* Time Header */}
