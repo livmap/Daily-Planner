@@ -39,13 +39,17 @@ export default function AddTask({ onClose }: { onClose: () => void }) {
 
     const storedTasks = localStorage.getItem("tasks");
     const parsedTasks = storedTasks ? JSON.parse(storedTasks) : [];
+    
+    // Sort tasks based on time before setting them
+    parsedTasks.sort((a: Task, b: Task) => {
+      const [aHour] = a.time.split(":").map(Number);
+      const [bHour] = b.time.split(":").map(Number);
+      return aHour - bHour;
+    });
+
     setTasks(parsedTasks);
-
-    
     setAvailableTimes(allTimes);
-
     setSelectedTime(allTimes[0]);
-    
   }, []);
 
   // Function to add a new task with a random color
@@ -54,7 +58,13 @@ export default function AddTask({ onClose }: { onClose: () => void }) {
 
     const randomColor = COLORS[Math.floor(Math.random() * COLORS.length)];
     const newTask = { name: taskName, time: selectedTime, color: randomColor };
-    const updatedTasks = [...tasks, newTask];
+
+    // Sort the tasks based on the time before updating state and localStorage
+    const updatedTasks = [...tasks, newTask].sort((a: Task, b: Task) => {
+      const [aHour] = a.time.split(":").map(Number);
+      const [bHour] = b.time.split(":").map(Number);
+      return aHour - bHour;
+    });
 
     localStorage.setItem("tasks", JSON.stringify(updatedTasks));
     setTasks(updatedTasks);

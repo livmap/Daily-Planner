@@ -6,9 +6,10 @@ interface TaskBlockProps {
     };
     startHour: number;
     timeRange: number[];
+    index: number;
   }
   
-  export default function TaskBlock({ task, timeRange }: TaskBlockProps) {
+  export default function TaskBlock({ task, timeRange, index }: TaskBlockProps) {
     // Safely split the time into hours and minutes
     const [taskHour, taskMinute] = task.time
       ? task.time.split(":").map((val) => parseInt(val, 10))
@@ -34,8 +35,8 @@ interface TaskBlockProps {
         className="text-white text-center p-2 rounded-lg shadow-md"
         style={{
           gridColumnStart: columnStart,
-          gridRowStart: rowStart,
-          gridRowEnd: `span 6`, // Adjust task height to span 1 hour
+          gridRowStart: Math.ceil(index * 4.5),
+          gridRowEnd: `span 4`, // Adjust task height to span 1 hour
           backgroundColor: task.color || "#999", // Fallback color
         }}
       >

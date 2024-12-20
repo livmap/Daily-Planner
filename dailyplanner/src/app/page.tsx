@@ -58,6 +58,7 @@ export default function DailyPlanner() {
               task={task}
               startHour={timeRange[0] || 0}
               timeRange={timeRange}
+              index={index}
             />
           ))}
         </div>
